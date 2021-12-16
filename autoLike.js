@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         B站视频自动点赞
+// @name         Bilibili自动点赞
 // @name-en      Bilibili Auto Like
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      1.0
 // @description  try to take over the world!
 // @author       Howxcheng
 // @include       *://*.bilibili.com/video/*
@@ -19,15 +19,6 @@
 // @compatible     safari 13.1 or later
 // @version        5.7.8.6
 // @run-at         document-start
-// @connect        passport.bilibili.com
-// @connect        api.live.bilibili.com
-// @connect        api.bilibili.com
-// @connect        api.vc.bilibili.com
-// @connect        live-trace.bilibili.com
-// @connect        sctapi.ftqq.com
-// @connect        pushplus.plus
-// @connect        andywang.top
-// @connect        gitee.com
 // @grant          unsafeWindow
 // @grant          GM_xmlhttpRequest
 // @grant          GM_getResourceText
@@ -42,16 +33,37 @@
 (function () {
     'use strict';
     console.log("10秒后自动点赞");
-    setTimeout(function() { clickLike() }, 10000);
+    setTimeout(function () { clickLike() }, 10000);
     function clickLike() {
-        let likeList = document.getElementsByClassName("like");
-        for(let item = 0;item < likeList.length;item++){
-            if(likeList[item].getAttribute("title").substr(0,2) === "点赞"){
-                if(likeList[item].getAttribute("class") === "like"){
-                    likeList[item].click();
-                }
+        let likeOnList = document.getElementsByClassName("like on");
+        let likeInfoActiveList = document.getElementsByClassName("like-info active");
+        if (likeOnList.length == 0 && likeInfoActiveList.length == 0) {
+            let likeList = document.getElementsByClassName("like");
+            for (let item = 0; item < likeList.length; item++) {
+                likeList[item].click();
             }
+            console.log("已自动点赞")
+            Toast("已自动点赞", 3000)
+        } else {
+            console.log("已点过赞啦")
+            Toast("已点过赞啦", 3000)
         }
-        console.log("已自动点赞");
+    }
+    //界面toast提示
+    /*使用方法 Toast('这是一个弹框',2000)*/
+    function Toast(msg, duration) {
+        duration = isNaN(duration) ? 3000 : duration;
+        var m = document.createElement('div');
+        m.innerHTML = msg;
+        m.style.cssText = "font-family:siyuan;max-width:60%;min-width: 150px;padding:0 14px;height: 40px;color: rgb(255, 255, 255);line-height: 40px;text-align: center;border-radius: 4px;position: fixed;top: 10%;left: 50%;transform: translate(-50%, -50%);z-index: 999999;background: rgba(0, 0, 0,.7);font-size: 16px;";
+        document.body.appendChild(m);
+        setTimeout(function () {
+            var d = 0.5;
+            m.style.webkitTransition = '-webkit-transform ' + d + 's ease-in, opacity ' + d + 's ease-in';
+            m.style.opacity = '0';
+            setTimeout(function () {
+                document.body.removeChild(m)
+            }, d * 1000);
+        }, duration);
     }
 })();
