@@ -1,23 +1,20 @@
 // ==UserScript==
-// @name         Bilibili自动点赞
-// @name-en      Bilibili Auto Like
-// @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  try to take over the world!
-// @author       Howxcheng
-// @include       *://*.bilibili.com/video/*
-// @include       *://*.bilibili.com/bangumi/*
-// @updateURL      https://raw.githubusercontent.com/howxcheng/BiliBili_Auto_Like/main/autoLike.js
-// @downloadURL    https://raw.githubusercontent.com/howxcheng/BiliBili_Auto_Like/main/autoLike.js
+// @name           Bilibili自动点赞
+// @name-en        Bilibili Auto Like
+// @namespace      http://tampermonkey.net/
+// @version        1.2
+// @description    哔哩哔哩视频、番剧自动点赞
+// @author         Howxcheng
+// @include        *://*.bilibili.com/video/*
+// @include        *://*.bilibili.com/bangumi/*
 // @homepageURL    https://github.com/howxcheng/BiliBili_Auto_Like
 // @supportURL     https://github.com/howxcheng/BiliBili_Auto_Like/issues
-// @icon           https://www.google.com/s2/favicons?domain=bilibili.com
+// @icon           https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://bilibili.com&size=16
 // @license        MIT
 // @compatible     chrome 80 or later
 // @compatible     firefox 77 or later
 // @compatible     opera 69 or later
 // @compatible     safari 13.1 or later
-// @version        5.7.8.6
 // @run-at         document-start
 // @grant          unsafeWindow
 // @grant          GM_xmlhttpRequest
@@ -32,14 +29,23 @@
 
 (function () {
     'use strict';
-    console.log("10秒后自动点赞");
-    setTimeout(function () { clickLike() }, 10000);
+    var originUrl = "";
+    var interval = setInterval(function () { judgeUrl() }, 10000);
+    // 监测url变化
+    function judgeUrl() {
+        var currentUrl = document.location.toString();
+        if (originUrl != currentUrl) {
+            originUrl = currentUrl
+            clickLike()
+        }
+    }
+    // 点赞
     function clickLike() {
-        let likeOnList = document.getElementsByClassName("like on");
-        let likeInfoActiveList = document.getElementsByClassName("like-info active");
+        var likeOnList = document.getElementsByClassName("like on");
+        var likeInfoActiveList = document.getElementsByClassName("like-info active");
         if (likeOnList.length == 0 && likeInfoActiveList.length == 0) {
-            let likeList = document.getElementsByClassName("like");
-            for (let item = 0; item < likeList.length; item++) {
+            var likeList = document.getElementsByClassName("like");
+            for (var item = 0; item < likeList.length; item++) {
                 if (likeList[item].getAttribute("title") !== null) {
                     likeList[item].click();
                 }
@@ -51,7 +57,7 @@
             Toast("已点过赞啦", 3000)
         }
     }
-    //toast界面提示
+    //界面toast提示
     function Toast(msg, duration) {
         duration = isNaN(duration) ? 3000 : duration;
         var m = document.createElement('div');
