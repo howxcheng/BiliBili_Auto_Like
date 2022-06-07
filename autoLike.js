@@ -10,8 +10,8 @@
 // @updateURL      https://raw.githubusercontent.com/howxcheng/BiliBili_Auto_Like/main/autoLike.js
 // @downloadURL    https://raw.githubusercontent.com/howxcheng/BiliBili_Auto_Like/main/autoLike.js
 // @homepageURL    https://github.com/howxcheng/BiliBili_Auto_Like
-// @supportURL      https://github.com/howxcheng/BiliBili_Auto_Like/issues
-// @icon         https://www.google.com/s2/favicons?domain=bilibili.com
+// @supportURL     https://github.com/howxcheng/BiliBili_Auto_Like/issues
+// @icon           https://www.google.com/s2/favicons?domain=bilibili.com
 // @license        MIT
 // @compatible     chrome 80 or later
 // @compatible     firefox 77 or later
@@ -40,7 +40,9 @@
         if (likeOnList.length == 0 && likeInfoActiveList.length == 0) {
             let likeList = document.getElementsByClassName("like");
             for (let item = 0; item < likeList.length; item++) {
-                likeList[item].click();
+                if (likeList[item].getAttribute("title") !== null) {
+                    likeList[item].click();
+                }
             }
             console.log("已自动点赞")
             Toast("已自动点赞", 3000)
@@ -49,8 +51,7 @@
             Toast("已点过赞啦", 3000)
         }
     }
-    //界面toast提示
-    /*使用方法 Toast('这是一个弹框',2000)*/
+    //toast界面提示
     function Toast(msg, duration) {
         duration = isNaN(duration) ? 3000 : duration;
         var m = document.createElement('div');
