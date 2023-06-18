@@ -2,7 +2,7 @@
 // @name           Bilibili自动点赞
 // @name-en        Bilibili_Auto_Like
 // @namespace      http://tampermonkey.net/
-// @version        2.0
+// @version        2.1
 // @description    哔哩哔哩视频、番剧自动点赞
 // @author         Howxcheng
 // @match          *://*.bilibili.com/video/*
@@ -106,7 +106,7 @@
   // 点赞
   function clickLike() {
     like_count++;
-    var _like_button = document.querySelector("span[class='like']");
+    var _like_button = document.querySelector("div[class='video-like video-toolbar-left-item']");
     if (_like_button !== null) {
       try {
         // // console.log("正在点赞");
@@ -122,7 +122,7 @@
       // console.log("未点赞，正在点赞,次数：" + like_count);
       like_count = 64;
     }
-    if (document.querySelector("span[class='like on']") !== null) {
+    if (document.querySelector("div[class='video-like video-toolbar-left-item on']") !== null) {
       // console.log("已点赞,次数：" + like_count);
       like_count = 64;
     }
